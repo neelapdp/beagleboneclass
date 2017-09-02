@@ -32,7 +32,7 @@ def updateLED(channel):
 
 #attach interrupts to GPIO pins
 for i in range(len(buttons)):
-    GPIO.add_event_detect(buttons[i], GPIO.BOTH, callback=updateLED)
+    GPIO.add_event_detect(buttons[i], GPIO.BOTH, pull_up_down = GPIO.PUD_DOWN, callback=updateLED)
 
 try:
     while True:
