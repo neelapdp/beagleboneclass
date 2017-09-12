@@ -129,29 +129,29 @@ while (True):
             print("cleared")
         elif (GPIO.input(buttons[3]) == 0 and GPIO.input(buttons[2])):
             move(-1,-1)
-            print("moved 1")
+            print("moved left-up")
         elif (GPIO.input(buttons[2]) and GPIO.input(buttons[1]) == 0):
             move(-1,1)
-            print("moved 2")
+            print("moved right-up")
         elif (GPIO.input(buttons[1]) == 0 and GPIO.input(buttons[0])):
             move(1,1)
-            print("moved 3")
+            print("moved right-down")
         elif (GPIO.input(buttons[0]) and GPIO.input(buttons[3]) == 0):
             move(1, -1)
-            print("moved 4")
+            print("moved left-down")
         elif (GPIO.input(buttons[3]) == 0): #now generate moves, remember board grows down and to right
             move(0,-1)
-            print("moved 5")
+            print("moved left")
             
         elif (GPIO.input(buttons[1]) == 0):
             move(0,1)
-            print("moved 6")
+            print("moved right")
         elif (GPIO.input(buttons[2])):
             move(-1,0)
-            print("moved 7")
+            print("moved up")
         elif (GPIO.input(buttons[0])):
             move(1,0)
-            print("moved 8")
+            print("moved down")
         
         else:
             time.sleep(0.5)
