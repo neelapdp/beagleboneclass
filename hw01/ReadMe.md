@@ -33,3 +33,7 @@ or greater, it might seem a little off. This is normal, and the result of double
 Afterwards, the help screen will display as well as the grid with the first x.
 The help screen will let you know how to use the game. wasd (lowercase) keys will move your
 position. So for example you might press ds to move down and right. to confirm your action, you must press enter for it to take effect. clear will remove all marks except the one you are positioned at. Also typing exit as a command and pressing enter will close the program.
+
+// Comment from Prof. Yoder
+// Python code works
+// Grade:  10/10
