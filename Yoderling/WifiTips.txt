@@ -1,0 +1,15 @@
+9/15/17
+
+Beaglebone's Wifi setup.
+The bone already has a webserver running and a W-lan acess point.
+Check into directory /etc/default/
+ls to get:
+apache-htcacheclean  bsdmainutils  dbus     hwclock     nss      udhcpd
+avahi-daemon         capemgr       dnsmasq  locale      rsync    useradd
+bb-wl18xx            cloud9        haveged  networking  rsyslog
+bluetooth            cron          hostapd  node        ssh
+
+
+Now less bb-wl18xx
+
+Check out passwords and etc.....
