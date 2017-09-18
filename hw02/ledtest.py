@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+#Note P9_23 and P9_28 must both be exported and set to a pull up resistor
 import Adafruit_BBIO.GPIO as GPIO
 import time
 
