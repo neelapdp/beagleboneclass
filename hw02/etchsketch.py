@@ -3,11 +3,9 @@
 
 
 #written by Daniel Neelappa 9/3/17
-#Daniel Neelappa 9/9/17: interfacing with board
-import sys
-
-
- 
+#Daniel Neelappa 9/9/17: interfacing with board, adding buttons
+#NOTE: Set P9_28 and P9_23 to pull up resistors for correct function
+import sys 
 import Adafruit_BBIO.GPIO as GPIO
 import time
 
@@ -121,6 +119,7 @@ drawBoard()
 
 
 #user prompt for interaction
+#user now can press any four buttons to select movement
 while (True):
     try:
         
@@ -155,7 +154,7 @@ while (True):
         
         else:
             time.sleep(0.5)
-        time.sleep(0.5)
+        time.sleep(0.5)#sleep for some time
         #update user's move and redraw
         updateMove()
         drawBoard()
@@ -163,4 +162,4 @@ while (True):
         print("Cleaning up")
         GPIO.cleanup()
         sys.close(0)
-GPIO.cleanup()
+GPIO.cleanup()#reset pins used
