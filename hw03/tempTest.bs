@@ -1,0 +1,4 @@
+#/bin/bash
+
+temp=`i2cget -y 1 0x49`
+echo $temp

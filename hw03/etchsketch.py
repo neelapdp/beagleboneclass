@@ -3,11 +3,9 @@
 
 
 #written by Daniel Neelappa 9/3/17
-#Daniel Neelappa 9/9/17: interfacing with board
-import sys
-
-
- 
+#Daniel Neelappa 9/9/17: interfacing with board, adding buttons
+#NOTE: Set P9_28 and P9_23 to pull up resistors for correct function
+import sys 
 import Adafruit_BBIO.GPIO as GPIO
 import time
 
@@ -15,17 +13,46 @@ import time
 GPIO.cleanup()
 
 #variables for LED's and buttons
-buttons = ['GP0_6', 'PAUSE', 'GP0_4', 'MODE']
+buttons = ['GP0_6', 'GP0_5', 'GP0_4', 'GP0_3', 'PAUSE']
 
      
 #Set up GPIO for Buttons
 for i in range(len(buttons)):
     GPIO.setup(buttons[i], GPIO.IN)
 
+#different callback structures, seperate functions for later adaptation to encoders
+def buttonMoveUp(channel):
+    move(-1,0)
+    updateMove()
+    drawBoard()
+
+def buttonMoveDown(channel):
+    move(1,0)
+    updateMove()
+    drawBoard()
 
 
+def buttonMoveLeft(channel):
+    move(0,-1)
+    updateMove()
+    drawBoard()
+    
+def buttonMoveRight(channel):
+    move(0,1)
+    updateMove()
+    drawBoard()
 
+def buttonReset(channel):
+    clearBoard()
+    updateMove()
+    drawBoard()
 
+#assign callbacks
+GPIO.add_event_detect(buttons[0], GPIO.FALLING, callback=buttonMoveUp)
+GPIO.add_event_detect(buttons[1], GPIO.FALLING, callback=buttonMoveDown)
+GPIO.add_event_detect(buttons[2], GPIO.FALLING, callback=buttonMoveLeft)
+GPIO.add_event_detect(buttons[3], GPIO.FALLING, callback=buttonMoveRight)
+GPIO.add_event_detect(buttons[4], GPIO.FALLING, callback = buttonReset)
 #function designed to draw the updated board
 def drawBoard():
     global Matrix
@@ -121,46 +148,12 @@ drawBoard()
 
 
 #user prompt for interaction
+#user now can press any four buttons to select movement
 while (True):
     try:
-        
-        if (GPIO.input(buttons[0]) and GPIO.input(buttons[1]) == 0 and GPIO.input(buttons[2]) and GPIO.input(buttons[3]) == 0):
-            clearBoard()
-            print("cleared")
-        elif (GPIO.input(buttons[3]) == 0 and GPIO.input(buttons[2])):
-            move(-1,-1)
-            print("moved left-up")
-        elif (GPIO.input(buttons[2]) and GPIO.input(buttons[1]) == 0):
-            move(-1,1)
-            print("moved right-up")
-        elif (GPIO.input(buttons[1]) == 0 and GPIO.input(buttons[0])):
-            move(1,1)
-            print("moved right-down")
-        elif (GPIO.input(buttons[0]) and GPIO.input(buttons[3]) == 0):
-            move(1, -1)
-            print("moved left-down")
-        elif (GPIO.input(buttons[3]) == 0): #now generate moves, remember board grows down and to right
-            move(0,-1)
-            print("moved left")
-            
-        elif (GPIO.input(buttons[1]) == 0):
-            move(0,1)
-            print("moved right")
-        elif (GPIO.input(buttons[2])):
-            move(-1,0)
-            print("moved up")
-        elif (GPIO.input(buttons[0])):
-            move(1,0)
-            print("moved down")
-        
-        else:
-            time.sleep(0.5)
-        time.sleep(0.5)
-        #update user's move and redraw
-        updateMove()
-        drawBoard()
+        time.sleep(30)
     except KeyboardInterrupt:
         print("Cleaning up")
         GPIO.cleanup()
         sys.close(0)
-GPIO.cleanup()
+GPIO.cleanup()#reset pins used
