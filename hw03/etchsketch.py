@@ -10,9 +10,11 @@ import Adafruit_BBIO.GPIO as GPIO
 import time
 import smbus
 
-
+#i2c setup
 bus = smbus.SMBus(1)  # Use i2c bus 1
 matrixConnection = 0x70         # Use address 0x70
+tempAddress = 0x49
+
 
 #set up matrix display
 bus.write_byte_data(matrixConnection, 0x21, 0)   # Start oscillator (p10)
@@ -201,7 +203,11 @@ drawBoard()
 #user now can press any four buttons to select movement
 while (True):
     try:
-        time.sleep(30)
+        time.sleep(1)
+        #perform temp fading
+        temp = (bus.read_byte_data(tempAddress, 0) - 22)
+        print("temp:", temp)
+        bus.write_byte_data(0x70, temp + 0xe0, 0)
     except KeyboardInterrupt:
         print("Cleaning up")
         GPIO.cleanup()
