@@ -1,5 +1,5 @@
 
-#!/usr/bin/env python3
+#!/usr/bin/python3
 
 
 #written by Daniel Neelappa 9/3/17
@@ -8,6 +8,22 @@
 import sys 
 import Adafruit_BBIO.GPIO as GPIO
 import time
+import smbus
+
+
+bus = smbus.SMBus(1)  # Use i2c bus 1
+matrixConnection = 0x70         # Use address 0x70
+
+#set up matrix display
+bus.write_byte_data(matrixConnection, 0x21, 0)   # Start oscillator (p10)
+bus.write_byte_data(matrixConnection, 0x81, 0)   # Disp on, blink off (p11)
+bus.write_byte_data(matrixConnection, 0xe7, 0)   # Full brightness (page 15)
+
+
+display = [0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+]
+bus.write_i2c_block_data(matrixConnection, 0, display)
 
 #prevent errors by cleaning Pins first
 GPIO.cleanup()
@@ -56,6 +72,8 @@ GPIO.add_event_detect(buttons[4], GPIO.FALLING, callback = buttonReset)
 #function designed to draw the updated board
 def drawBoard():
     global Matrix
+    global matrixConnection
+    global display
     isleCount = 0 
     #draw horizontal isle indicators
     sys.stdout.write("  ")
@@ -77,10 +95,15 @@ def drawBoard():
             isleCount = isleCount + 1
         sys.stdout.write('\n')
         rowCount = rowCount + 1
+        
+        #handle matrix display
+    bus.write_i2c_block_data(matrixConnection, 0, display)
 
 #clear the board
 def clearBoard():
     global Matrix
+    global display
+    global matrixConnection
     rowCount = 0 #go row by row, and blank each tile
     while (rowCount != tileCount):
         isleCount = 0
@@ -88,23 +111,50 @@ def clearBoard():
             Matrix[rowCount][isleCount] = ' '
             isleCount = isleCount + 1
         rowCount = rowCount + 1
+    for i in range(0,15):
+        display[i] = 0
+    bus.write_i2c_block_data(matrixConnection, 0, display)
+
 
 #moves your position based on args
 def move(y,x):
     global posx
     global posy
+    global display
+
+
+    #create orange square
+    displayBit = 128
+    displayBit = displayBit >> posy
+    index = posx * 2 + 1
+    display[index] = displayBit | display[index]
+    
+    Matrix[posy][posx] = 'x' #have the previous position become a x
     #makes sure move is valid
     if ( ((posy + y) >= 0) and ((posy + y) <= (tileCount -1)) ):
         posy = posy + y
     if ( ((posx + x) >= 0) and ((posx + x) <= (tileCount -1)) ):
         posx = posx + x
 
+    #reset to make current position green
+    displayBit = 65407
+    displayBit = displayBit >> posy
+    index = posx * 2 + 1
+    display[index] = displayBit & display[index]   
+
 #draws x at the current position
 def updateMove():
     global posx
     global posy
     global Matrix
-    Matrix[posy][posx] = 'x'
+    global display
+    global matrixConnection
+
+    displayBit = 128
+    displayBit = displayBit >> posy
+    index = posx * 2
+    display[index] = displayBit | display[index]
+    Matrix[posy][posx] = 'o'
 
 #print intro line
 print("Etch Sketch program\nDaniel Neelappa -V.1 9/1/17\n")
