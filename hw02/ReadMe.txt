@@ -14,3 +14,8 @@ get something working that is better.
 Hi Dr. Yoder,
 	etchsketchy.py is updated to be used with buttons. I documented my code and pushed it to the repo. I didn't get a chance to interact with a wireless phone, but I want to build towards that Internet of Things approach later in the course. Currently, the code in etchsketch.py and ledtest.py both use external GPIO pins for the buttons and leds. Also, both programs need "python3 <fileName>" to run them. The "./" still throws errors when used.
 
+
+# Comments from Prof. Yoder
+# Looks good.  
+# You can't have a blank line before the #! in your file.  I've fixed it for you.
+# Grade:  10/10
