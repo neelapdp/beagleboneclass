@@ -3,6 +3,7 @@
 // Read one gpio pin and write it out to another using mmap.
 // Be sure to set -O3 when compiling.
 // Modified by Mark A. Yoder  26-Sept-2013
+// Modified by Daniel P. Neelappa 3-Oct-2017
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/mman.h>
@@ -49,59 +50,59 @@ int main(int argc, char *argv[]) {
 
     printf("Mapping %X - %X (size: %X)\n", GPIO1_START_ADDR, GPIO1_END_ADDR, 
                                            GPIO1_SIZE);
-
+    //this opens gp1's mem location
     gpio_addr = mmap(0, GPIO1_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 
                         GPIO1_START_ADDR);
-
+    //gpio 1'st mem variables
     gpio_oe_addr           = gpio_addr + GPIO_OE;
     gpio_datain            = gpio_addr + GPIO_DATAIN;
     gpio_setdataout_addr   = gpio_addr + GPIO_SETDATAOUT;
     gpio_cleardataout_addr = gpio_addr + GPIO_CLEARDATAOUT;
 
     
-    
+    //this opens gp0's mem location
     gpio_addr_two = mmap(0, GPIO0_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 
                         GPIO0_START_ADDR);
-
+    //gpio 2nd mem variables
     gpio_oe_addr_two           = gpio_addr_two + GPIO_OE;
     gpio_datain_two            = gpio_addr_two + GPIO_DATAIN;
     gpio_setdataout_addr_two   = gpio_addr_two + GPIO_SETDATAOUT;
     gpio_cleardataout_addr_two = gpio_addr_two + GPIO_CLEARDATAOUT;
-
+    //if memory can't be opened
     if(gpio_addr == MAP_FAILED || gpio_addr_two == MAP_FAILED) {
         printf("Unable to map GPIO\n");
         exit(1);
     }
+    //open 1st memory location printed to user
     printf("GPIO mapped to %p\n", gpio_addr);
     printf("GPIO OE mapped to %p\n", gpio_oe_addr);
     printf("GPIO SETDATAOUTADDR mapped to %p\n", gpio_setdataout_addr);
     printf("GPIO CLEARDATAOUT mapped to %p\n", gpio_cleardataout_addr);
-
+    //open 2nd memory location printed to user
     printf("GPIO 2nd mapped to %p\n", gpio_addr_two);
     printf("GPIO OE 2nd mapped to %p\n", gpio_oe_addr_two);
     printf("GPIO SETDATAOUTADDR 2nd mapped to %p\n", gpio_setdataout_addr_two);
     printf("GPIO CLEARDATAOUT 2nd mapped to %p\n", gpio_cleardataout_addr_two);
     
-
-//29
-//21
-//22
-//23
-//24
+//The pins below correspond to the GP1 port offset to board locations
+//29 I believe this is the green led of the battery
+//23 USr2 LED
+//24 USr3 LED
     while(keepgoing) {
-
+	//triggers a Usr3 led when a button is pressed
    	if(!((*gpio_datain) & (1<<25))) {
-           *gpio_setdataout_addr = 1 << 24; 
+           *gpio_setdataout_addr = 1 << 24;  //on
    	} else {
-           *gpio_cleardataout_addr = 1 << 24;
+           *gpio_cleardataout_addr = 1 << 24; //off
    	}
-   	printf("x%x\n", (*gpio_datain));
+   	printf("x%x\n", (*gpio_datain)); //print data in to see how the whole value is changing
         usleep(100000);
         
+	//triggers usr2 led when a butotn is pressed
         if(!((*gpio_datain) & (1<<17))) {
-           *gpio_setdataout_addr = 1 << 23; 
+           *gpio_setdataout_addr = 1 << 23;  //on
    	} else {
-           *gpio_cleardataout_addr = 1 << 23;
+           *gpio_cleardataout_addr = 1 << 23; //off
    	}
         
     }

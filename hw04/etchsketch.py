@@ -1,5 +1,4 @@
-
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 
 #written by Daniel Neelappa 9/3/17
@@ -9,6 +8,15 @@ import sys
 import Adafruit_BBIO.GPIO as GPIO
 import time
 import smbus
+
+###################Encoders#############################
+# import rcpy library
+# This automatically initizalizes the robotics cape
+import rcpy 
+import rcpy.encoder as encoder
+
+rcpy.set_state(rcpy.RUNNING)
+########################################################
 
 #i2c setup
 bus = smbus.SMBus(1)  # Use i2c bus 1
@@ -113,8 +121,9 @@ def clearBoard():
             Matrix[rowCount][isleCount] = ' '
             isleCount = isleCount + 1
         rowCount = rowCount + 1
-    for i in range(0,15):
-        display[i] = 0
+    display = [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+]
     bus.write_i2c_block_data(matrixConnection, 0, display)
 
 
@@ -201,12 +210,32 @@ drawBoard()
 
 #user prompt for interaction
 #user now can press any four buttons to select movement
+
+e2Old = encoder.get(2) #horizontal control encoder
+e3Old = encoder.get(3) #vertical control encoder
 while (True):
     try:
-        time.sleep(1)
+        e2New = encoder.get(2) # read the encoders
+        e3New = encoder.get(3)
+        
+        if (3 < abs(abs(e2Old) - abs(e2New))):
+            print("e2", e2New)
+            if (e2New > e2Old):
+                buttonMoveRight(1)
+            else:
+                buttonMoveLeft(1)
+        if (3 < abs(abs(e3Old) - abs(e3New))):
+            print("e3", e3New)
+            if (e3New > e3Old):
+                buttonMoveUp(1)
+            else:
+                buttonMoveDown(1)
+        e2Old = e2New
+        e3Old = e3New
+
+        time.sleep(0.1)
         #perform temp fading
         temp = (bus.read_byte_data(tempAddress, 0) - 22)
-        print("temp:", temp)
         bus.write_byte_data(0x70, temp + 0xe0, 0)
     except KeyboardInterrupt:
         print("Cleaning up")
