@@ -26,3 +26,7 @@ I also added the memory diagram to the repo. It is called "memory location of Be
 
 I think a good final project might be to create a mapper to systematically check all these ports and perform a mapping operation.
 
+# Comments from Prof. Yoder
+# Found your memory map file
+# Looks good.
+# Grade:  10/10
