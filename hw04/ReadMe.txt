@@ -20,5 +20,13 @@ this assignment is trying to figure out where the chip's ports match with the tr
 ports that we are used to on the beaglebone blue diagram. Right now in the code,
 I have two buttons and two leds both sharing the same GPIO mem. location.
 This can easily be changed by using the second mem. variables to access more ports.
+
+I also added the memory diagram to the repo. It is called "memory location of Beaglebone Blue".
+
+
 I think a good final project might be to create a mapper to systematically check all these ports and perform a mapping operation.
 
+# Comments from Prof. Yoder
+# Found your memory map file
+# Looks good.
+# Grade:  10/10
