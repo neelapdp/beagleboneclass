@@ -50,3 +50,8 @@ is pressed, it will parse the state and update accordingly. It will then access 
 Write your code.  Do you need to change boneServer.js? (I don’t think so.)  Customize the html to have your name on it, etc.
 
 Code All good!
+
+// Comments from Prof. Yoder
+// Good documentation
+// It works!
+// Grade:  10/10

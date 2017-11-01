@@ -18,3 +18,7 @@ The display runs off of GP0 and SPi1 ports on the beaglebone blue.
 
 To run the program use sudo ./etch-a-sketch
 if the exec is not there, then use "make" to create it.
+
+// Comments from Prof. Yoder
+// It works!
+// Grade:  10/10
