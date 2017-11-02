@@ -18,5 +18,7 @@ The python gpio command was the slowest. It was mapping the input of GPO1_4
 to GP0_3. However, the system did perform better in timing speeds when mmap
 was running in the background. It might have increased the refresh rate of the device to improve the python version.
 
+I attached a word document that has a table with timings as well as scope captures of each condition.
+
 my project page
 https://elinux.org/ECE497_Project-Queue
