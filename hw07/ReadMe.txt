@@ -22,3 +22,9 @@ I attached a word document that has a table with timings as well as scope captur
 
 my project page
 https://elinux.org/ECE497_Project-Queue
+
+// Comments from Prof. Yoder
+// Min and Max results are missing
+// % CPU is missing
+// Pictures look good
+// Grade:  7/10
